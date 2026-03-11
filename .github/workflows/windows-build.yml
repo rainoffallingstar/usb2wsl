@@ -70,8 +70,8 @@ jobs:
 
           gh --version | Out-Null
 
-          $exists = $true
-          try { gh release view $tag | Out-Null } catch { $exists = $false }
+          gh release view $tag *> $null
+          $exists = ($LASTEXITCODE -eq 0)
 
           if (-not $exists) {
             gh release create $tag --title $title --notes ""
