@@ -26,7 +26,7 @@ import (
 	"unsafe"
 )
 
-//go:embed ../../scripts/install-schtask.ps1
+//go:embed assets/install-schtask.ps1
 var embeddedInstallSchTaskPS1 string
 
 type Config struct {

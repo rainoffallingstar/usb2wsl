@@ -64,6 +64,8 @@ wsl -l -v
 .\usb2wsl.exe task install
 ```
 
+（仓库里的 `scripts/install-schtask.ps1` 仅用于查看/参考；`usb2wsl.exe` 实际使用的是内置脚本。）
+
 如果希望计划任务写日志文件：
 
 ```powershell
