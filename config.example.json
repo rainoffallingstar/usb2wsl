@@ -1,0 +1,21 @@
+{
+  "wslDistro": "Ubuntu-24.04",
+  "wslPostAttachBash": "/usr/local/bin/wsl-mount-media.sh",
+  "autoStartDistro": true,
+  "allowVIDPID": [
+    "1234:5678",
+    "abcd:ef01"
+  ],
+  "allowDeviceRegex": "mass storage|optical|cd-rom|dvd|udf",
+  "pollIntervalSeconds": 2,
+  "usbipdPath": "usbipd",
+  "wslExePath": "wsl.exe",
+  "autoInstallUsbipd": true,
+  "openExplorer": true,
+  "explorerPath": "explorer.exe",
+  "explorerOpenWslPath": "/mnt/usbipd",
+  "explorerDebounceSeconds": 5,
+  "promptOnAttach": true,
+  "statePath": "usb2wsl.state.json",
+  "logPath": "usb2wsl.log"
+}
