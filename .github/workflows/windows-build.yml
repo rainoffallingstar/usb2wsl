@@ -4,9 +4,10 @@ on:
   push:
     branches: ["**"]
   pull_request:
+  workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -42,3 +43,38 @@ jobs:
           name: usb2wsl-windows-${{ matrix.arch }}
           path: dist/usb2wsl-${{ matrix.arch }}.exe
 
+  release:
+    needs: [build]
+    runs-on: windows-latest
+    if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: usb2wsl-windows-*
+          merge-multiple: true
+          path: dist
+
+      - name: Create or update daily release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = "Stop"
+          $tag = (Get-Date -Format "yyyy-MM-dd")
+          $title = "Daily build $tag"
+
+          gh --version | Out-Null
+
+          $exists = $true
+          try { gh release view $tag | Out-Null } catch { $exists = $false }
+
+          if (-not $exists) {
+            gh release create $tag --title $title --notes ""
+          } else {
+            gh release edit $tag --title $title
+          }
+
+          $files = Get-ChildItem -Path dist -Filter "*.exe" | ForEach-Object { $_.FullName }
+          if ($files.Count -eq 0) { throw "No .exe files found in dist/" }
+          gh release upload $tag $files --clobber
